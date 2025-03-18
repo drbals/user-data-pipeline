@@ -4,7 +4,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 
 default_args = {
-    'owner': 'airscholar',
+    'owner': 'airflowMaster',
     'start_date': datetime(2024, 3, 17, 10, 00)
 }
 
@@ -42,13 +42,15 @@ def stream_data():
     import time
     import logging
 
+    # listener_int - DAG triggered from airflow UI running on container
+    # listener_ext - when stream_data() function called from local terminal
     listener_int = 'broker:29092'
     listener_ext = 'localhost:9092'
     producer = KafkaProducer(bootstrap_servers=[listener_int], max_block_ms=5000)
     curr_time = time.time()
 
     while True:
-        if time.time() > curr_time + 500: #1 minute
+        if time.time() > curr_time + 300: # 5 minutes
             break
         try:
             res = get_data()
@@ -71,3 +73,5 @@ with DAG('user_automation',
         task_id='stream_data_from_api',
         python_callable=stream_data
     )
+
+# stream_data()

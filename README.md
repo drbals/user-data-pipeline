@@ -2,36 +2,53 @@
 
 ## Table of Contents
 - [Introduction](#introduction)
-- [Architecture](#system-architecture)
-- [Technologies](#technologies)
+- [Architecture](#architecture)
+- [Technologies Used](#technologies-used)
+- [Instructions](#instructions)
 
 
 
 ## Introduction
 
-This project serves as a comprehensive guide to building an end-to-end data engineering pipeline. It covers each stage from data ingestion to processing and finally to storage, utilizing a robust tech stack that includes Apache Airflow, Python, Apache Kafka, Apache Zookeeper, Apache Spark, and Cassandra. Everything is containerized using Docker for ease of deployment and scalability.
-
+This project showcases the development of a complete end-to-end data engineering pipeline, covering every stage from data ingestion to processing and storage. It leverages a powerful tech stack, including Apache Airflow, Python, Apache Kafka, Apache Zookeeper, Apache Spark, and Cassandra. The entire solution is containerized with Docker, ensuring seamless deployment and scalability.
 ## Architecture
 
-The project is designed with the following components:
+The project is structured with the following components:
 
-- **Data Source**: We use `randomuser.me` API to generate random user data for our pipeline.
-- **Apache Airflow**: Responsible for orchestrating the pipeline and storing fetched data in a PostgreSQL database.
-- **Apache Kafka and Zookeeper**: Used for streaming data from PostgreSQL to the processing engine.
-- **Control Center and Schema Registry**: Helps in monitoring and schema management of our Kafka streams.
-- **Apache Spark**: For data processing with its master and worker nodes.
-- **Cassandra**: Where the processed data will be stored.
+- **Data Source**: The pipeline uses the `randomuser.me` API to generate random user data.
+- **Apache Airflow**: Orchestrates tasks to stream data into Kafka topics and uses a **PostgreSQL** database to store metadata.
+- **Apache Kafka and Zookeeper**: Facilitates real-time data streaming by receiving data from Airflow and making it available for Spark processing.
+- **Control Center and Schema Registry**: Enable **monitoring** and **schema management** for Kafka streams.
+- **Apache Spark**: Performs **data processing** using master and worker nodes in a standalone cluster run in client mode.
+- **Cassandra**: Serves as the final sink for storing the processed data.
 
-## Technologies
+## Technologies Used
 
 - Apache Airflow
-- Python
 - Apache Kafka
-- Apache Zookeeper
 - Apache Spark
 - Cassandra
 - PostgreSQL
 - Docker
 
-## Credits
-- This project was inspired by [air scholar](https://github.com/airscholar)'s work on Data engineering.
+## Instructions
+
+### Commands
+```commandline
+1. git clone git@github.com:drbals/user-data-pipeline.git
+2. cd user-data-pipeline
+3. docker compose up -d
+4. docker exec -it <container id or name> bash
+5. spark-submit --master spark://spark-master:7077 \
+--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1,\
+com.datastax.spark:spark-cassandra-connector_2.12:3.4.1 spark_stream.py
+6. docker exec -it cassandra cqlsh -u cassandra -p cassandra localhost 9042
+7. select * from spark_streams.created_users;
+```
+### Actions
+1. Run the first three commands provided to start all necessary applications.
+2. Trigger the `user_automation` DAG from the **Airflow UI** at [http://localhost:8080/](http://localhost:8080/).
+3. Verify the data produced into the Kafka topic `users_created` via **Control Center** at [http://localhost:9021/](http://localhost:9021/).
+4. Use command 4 to access the bash terminal of any Spark cluster node.
+5. Execute command 5 in a node's shell to submit the job, with **Spark Master** UI accessible at [http://localhost:9090/](http://localhost:9090/).
+6. Utilize the last two commands to log into **Cassandra DB** and view the processed records in the table.
