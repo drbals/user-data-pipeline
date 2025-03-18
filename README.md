@@ -15,7 +15,7 @@ This project showcases the development of a complete end-to-end data engineering
 
 The project is structured with the following components:
 
-- **Data Source**: The pipeline uses the `randomuser.me` API to generate random user data.
+- **Data Source**: The pipeline uses the [randomuser.me](https://randomuser.me/) API to generate random user data.
 - **Apache Airflow**: Orchestrates tasks to stream data into Kafka topics and uses a **PostgreSQL** database to store metadata.
 - **Apache Kafka and Zookeeper**: Facilitates real-time data streaming by receiving data from Airflow and making it available for Spark processing.
 - **Control Center and Schema Registry**: Enable **monitoring** and **schema management** for Kafka streams.
@@ -41,14 +41,14 @@ The project is structured with the following components:
 4. docker exec -it <container id or name> bash
 5. spark-submit --master spark://spark-master:7077 \
 --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1,\
-com.datastax.spark:spark-cassandra-connector_2.12:3.4.1 spark_stream.py
+com.datastax.spark:spark-cassandra-connector_2.12:3.4.1 stream_internal.py
 6. docker exec -it cassandra cqlsh -u cassandra -p cassandra localhost 9042
 7. select * from spark_streams.created_users;
 ```
 ### Actions
 1. Run the first three commands provided to start all necessary applications.
 2. Trigger the `user_automation` DAG from the **Airflow UI** at [http://localhost:8080/](http://localhost:8080/).
-3. Verify the data produced into the Kafka topic `users_created` via **Control Center** at [http://localhost:9021/](http://localhost:9021/).
-4. Use command 4 to access the bash terminal of any Spark cluster node.
-5. Execute command 5 in a node's shell to submit the job, with **Spark Master** UI accessible at [http://localhost:9090/](http://localhost:9090/).
+3. Verify the data produced in the Kafka topic `users_created` via **Control Center** at [http://localhost:9021/](http://localhost:9021/).
+4. Use command-4 to access the bash terminal of any Spark cluster node.
+5. Execute command-5 in a node's shell to submit the job, with **Spark Master** UI accessible at [http://localhost:9090/](http://localhost:9090/).
 6. Utilize the last two commands to log into **Cassandra DB** and view the processed records in the table.
