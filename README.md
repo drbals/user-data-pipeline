@@ -2,7 +2,7 @@
 
 ## Table of Contents
 - [Introduction](#introduction)
-- [Architecture](#architecture)
+- [Workflow](#workflow)
 - [Technologies Used](#technologies-used)
 - [Instructions](#instructions)
 
@@ -11,7 +11,8 @@
 ## Introduction
 
 This project showcases the development of a complete end-to-end data engineering pipeline, covering every stage from data ingestion to processing and storage. It leverages a powerful tech stack, including Apache Airflow, Python, Apache Kafka, Apache Zookeeper, Apache Spark, and Cassandra. The entire solution is containerized with Docker, ensuring seamless deployment and scalability.
-## Architecture
+
+## Workflow
 
 The project is structured with the following components:
 
@@ -40,8 +41,8 @@ The project is structured with the following components:
 3. docker compose up -d
 4. docker exec -it <container id or name> bash
 5. spark-submit --master spark://spark-master:7077 \
---packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1,\
-com.datastax.spark:spark-cassandra-connector_2.12:3.5.1 stream_internal.py
+--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1,\
+com.datastax.spark:spark-cassandra-connector_2.12:3.4.1 stream_internal.py
 6. docker exec -it cassandra cqlsh -u cassandra -p cassandra localhost 9042
 7. select * from spark_streams.created_users;
 ```
