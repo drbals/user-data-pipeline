@@ -33,3 +33,5 @@ The project is designed with the following components:
 - PostgreSQL
 - Docker
 
+## Credits
+- This project was inspired by [air scholar](https://github.com/airscholar)'s work on Data engineering.
